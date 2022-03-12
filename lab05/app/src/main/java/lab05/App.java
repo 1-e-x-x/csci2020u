@@ -53,7 +53,7 @@ public class App extends Application{
 
         
 
-        StudentRecord testus = new StudentRecord("100100102", 100.0f, 97.0f, 92.5f);
+        //StudentRecord testus = new StudentRecord("100100102", 100.0f, 97.0f, 92.5f);
 
         tableView.getColumns().add(col1);
         tableView.getColumns().add(col2);
