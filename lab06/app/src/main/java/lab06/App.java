@@ -42,7 +42,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
 
-        stage.setTitle("Drawing Operations Test");
+        stage.setTitle("Lab 06");
         Group root = new Group();
         Canvas canvas = new Canvas(900, canvasY);
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -86,11 +86,11 @@ public class App extends Application {
         double start = 0;
         double travel = 0;
         for(int i = 0; i < ageGroups.length; i++){
-            travel =  purchasesByAgeGroup[i] / sumPurchasesByAgeGroup * 730;//ah yes, there are 730 degrees in a circle. there are no issues in my code whatsoever
+            travel =  purchasesByAgeGroup[i] / sumPurchasesByAgeGroup * 360;
             gc.setFill(pieColours[i]);
             gc.fillArc(500, 100, 200, 200, start, travel, ArcType.ROUND);
             //gc.fillArc(300, 300, 200, 200, 90, 90, ArcType.ROUND);
-            start = 1 * travel;
+            start = start + travel;
         }
     }
 }
