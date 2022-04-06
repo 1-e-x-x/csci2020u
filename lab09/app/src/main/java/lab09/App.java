@@ -7,15 +7,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-public class App {
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.stage.Stage;
+
+public class App extends Application{
 
     public static String[][] downloadStockPrices(String stock, int timeStamp1, int timeStamp2, String interval, String events, boolean includeAdjustedClose){
-        //pulls csv stock data from yahoo, returns it as an array of strings
+        //pulls csv stock data from yahoo, returns it as a 2d array of strings
         try {
             //stole this code from the modules, I hope you won't mind ;)
             //my implementation is also exceptionally lazy.
@@ -46,15 +56,47 @@ public class App {
         }
     }
 
+    public static String stock1 = "GOOG";
+    public static String stock2 = "AAPL";
+    public static int timeStamp1 = 1262322000;
+    public static int timeStamp2 = 1451538000;
+    public static String interval = "1mo";
+    public static String events = "history";
+    public static boolean includeAdjustedClose = true;
+    public static int canvasX = 900;
+    public static int canvasY = 900;
+
     public static void main(String[] args) {
-        String stock1 = "GOOG";
-        String stock2 = "APPL";
-        int timeStamp1 = 1262322000;
-        int timeStamp2 = 1451538000;
-        String interval = "1mo";
-        String events = "history";
-        boolean includeAdjustedClose = true;
-        downloadStockPrices(stock1, timeStamp1, timeStamp2, interval, events, includeAdjustedClose);
+
+        launch(args);
+    }
+    @Override
+    public void start(Stage stage){
+        stage.setTitle("Lab 09");
+        Group root = new Group();
+        Canvas canvas = new Canvas(canvasX, canvasY);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        drawShapes(gc);
+        root.getChildren().add(canvas);
+        stage.setScene(new Scene(root));
+        stage.setAlwaysOnTop(true); //added this line to speed up prototyping, I'm tired of alt-tabbing
+        stage.show();
+    }
+    private void drawShapes(GraphicsContext gc){
+        drawStockLine(gc, downloadStockPrices(stock1, timeStamp1, timeStamp2, interval, events, includeAdjustedClose), Color.BLUE);
+        drawStockLine(gc, downloadStockPrices(stock2, timeStamp1, timeStamp2, interval, events, includeAdjustedClose), Color.RED);
+    }
+    private void drawStockLine(GraphicsContext gc, String[][] data, Color color){
+        float xScale = canvasX/data.length;
+        System.out.println(xScale);
+        gc.beginPath();
+        gc.setFill(color);
+        gc.moveTo(0, 0);
+        for (int i = 1; i < data.length; i++){
+            gc.lineTo(xScale*i, 900-Float.parseFloat(data[i][1]));
+    
+        }
+        gc.stroke();
 
     }
 }
